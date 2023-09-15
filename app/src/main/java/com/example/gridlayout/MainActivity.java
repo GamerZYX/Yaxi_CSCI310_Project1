@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.os.Handler;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
 
     private int clock = 0;
     private boolean running = true;
+
+    private int minutes = 0;
+    private int seconds = 0;
 
     // save the TextViews of all cells in an array, so later on,
     // when a TextView is clicked, we know which cell it is
@@ -35,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         cell_tvs = new ArrayList<TextView>();
+
+        if (savedInstanceState != null) {
+            clock = savedInstanceState.getInt("clock");
+            running = savedInstanceState.getBoolean("running");
+        }
+
+        runTimer();
 
         // Method (1): add statically created cells
 //        TextView tv00 = (TextView) findViewById(R.id.textView00);
@@ -107,6 +118,32 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }
 
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("clock", clock);
+        savedInstanceState.putBoolean("running", running);
+    }
+
+    private void runTimer() {
+        final TextView timeView = (TextView) findViewById(R.id.textView03);
+        final Handler handler = new Handler();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                minutes = (clock%3600) / 60;
+                seconds = clock%60;
+                String time = String.format("%02d:%02d", minutes, seconds);
+                timeView.setText(time);
+
+                if (running) {
+                    clock++;
+                }
+                handler.postDelayed(this, 1000);
+            }
+        });
     }
 
     private int findIndexOfCellTextView(TextView tv) {
