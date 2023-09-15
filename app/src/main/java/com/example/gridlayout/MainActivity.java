@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int COLUMN_COUNT = 10;
     private int flag_left = 4;
 
+    private int clock = 0;
+    private boolean running = true;
+
     // save the TextViews of all cells in an array, so later on,
     // when a TextView is clicked, we know which cell it is
     private ArrayList<TextView> cell_tvs;
