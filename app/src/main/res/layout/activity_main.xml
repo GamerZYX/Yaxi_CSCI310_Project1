@@ -54,6 +54,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/buttonPick"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="170dp"
+        android:layout_marginTop="515dp"
+        android:text="@string/pick"
+        android:textSize="45sp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gridLayout01"
@@ -121,5 +134,7 @@
 <!--            app:layout_row="1" />-->
 
     </androidx.gridlayout.widget.GridLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

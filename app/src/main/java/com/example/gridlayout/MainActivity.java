@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.os.Handler;
+import android.widget.Button;
+
 
 import java.util.ArrayList;
 
@@ -23,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
     private int minutes = 0;
     private int seconds = 0;
+
+    private boolean isPicked = true;
+
 
     // save the TextViews of all cells in an array, so later on,
     // when a TextView is clicked, we know which cell it is
@@ -46,6 +51,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         runTimer();
+
+        Button buttonPick = findViewById(R.id.buttonPick);
+        buttonPick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isPicked) {
+                    buttonPick.setText(R.string.flag);
+                } else {
+                    buttonPick.setText(R.string.pick);
+                }
+                isPicked = !isPicked;
+            }
+        });
 
         // Method (1): add statically created cells
 //        TextView tv00 = (TextView) findViewById(R.id.textView00);
@@ -157,9 +175,9 @@ public class MainActivity extends AppCompatActivity {
     public void onClickTV(View view){
         TextView tv = (TextView) view;
         int n = findIndexOfCellTextView(tv);
-        int i = n/COLUMN_COUNT;
-        int j = n%COLUMN_COUNT;
-        tv.setText(String.valueOf(i)+String.valueOf(j));
+//        int i = n/COLUMN_COUNT;
+//        int j = n%COLUMN_COUNT;
+        tv.setText(String.valueOf(n));
         if (tv.getCurrentTextColor() == Color.GREEN) {
             tv.setTextColor(Color.GRAY);
             tv.setBackgroundColor(Color.LTGRAY);
