@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.os.Handler;
 import android.widget.Button;
+import java.util.ArrayList;
+import java.util.Random;
 
 
 import java.util.ArrayList;
@@ -33,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     // when a TextView is clicked, we know which cell it is
     private ArrayList<TextView> cell_tvs;
 
+    private ArrayList<Integer> numbers = new ArrayList<>();
+    Random random = new Random();
+
     private int dpToPixel(int dp) {
         float density = Resources.getSystem().getDisplayMetrics().density;
         return Math.round(dp * density);
@@ -51,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         runTimer();
+
+        for (int i = 0; i < 4; i++) {
+            int randomNumber = random.nextInt(120);
+            numbers.add(randomNumber);
+        }
 
         TextView textViewPick = findViewById(R.id.textViewPick);
         textViewPick.setOnClickListener(new View.OnClickListener() {
@@ -177,10 +187,30 @@ public class MainActivity extends AppCompatActivity {
         int n = findIndexOfCellTextView(tv);
 //        int i = n/COLUMN_COUNT;
 //        int j = n%COLUMN_COUNT;
-        tv.setText(String.valueOf(n));
-        if (tv.getCurrentTextColor() == Color.GREEN) {
-            tv.setTextColor(Color.GRAY);
-            tv.setBackgroundColor(Color.LTGRAY);
+        if (isPicked)
+        {
+            tv.setText(String.valueOf(n));
+            if (tv.getCurrentTextColor() == Color.GREEN) {
+                tv.setTextColor(Color.GRAY);
+                tv.setBackgroundColor(Color.LTGRAY);
+//            String mineText = getResources().getString(R.string.mine);
+//            tv.setText(mineText);
+            }
         }
+        else{
+            String flagText = getResources().getString(R.string.flag);
+            if (tv.getText()==flagText)
+            {
+                tv.setText("");
+                flag_left++;
+            }
+            else if (flag_left>0 && tv.getCurrentTextColor() == Color.GREEN) {
+                tv.setText(flagText);
+                flag_left--;
+            }
+            TextView flagNumberView = findViewById(R.id.textView01);
+            flagNumberView.setText(String.valueOf(flag_left));
+        }
+
     }
 }
