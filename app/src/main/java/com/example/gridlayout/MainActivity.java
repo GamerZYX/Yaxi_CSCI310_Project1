@@ -189,12 +189,14 @@ public class MainActivity extends AppCompatActivity {
 //        int j = n%COLUMN_COUNT;
         if (isPicked)
         {
-            tv.setText(String.valueOf(n));
+            tv.setText(String.valueOf(numbers.get(n%4)));
             if (tv.getCurrentTextColor() == Color.GREEN) {
                 tv.setTextColor(Color.GRAY);
                 tv.setBackgroundColor(Color.LTGRAY);
-//            String mineText = getResources().getString(R.string.mine);
-//            tv.setText(mineText);
+                if (numbers.contains(n)) {
+                    String mineText = getResources().getString(R.string.mine);
+                    tv.setText(mineText);
+                }
             }
         }
         else{
