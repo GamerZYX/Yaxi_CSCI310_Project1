@@ -52,14 +52,14 @@ public class MainActivity extends AppCompatActivity {
 
         runTimer();
 
-        Button buttonPick = findViewById(R.id.buttonPick);
-        buttonPick.setOnClickListener(new View.OnClickListener() {
+        TextView textViewPick = findViewById(R.id.textViewPick);
+        textViewPick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isPicked) {
-                    buttonPick.setText(R.string.flag);
+                    textViewPick.setText(R.string.flag);
                 } else {
-                    buttonPick.setText(R.string.pick);
+                    textViewPick.setText(R.string.pick);
                 }
                 isPicked = !isPicked;
             }
