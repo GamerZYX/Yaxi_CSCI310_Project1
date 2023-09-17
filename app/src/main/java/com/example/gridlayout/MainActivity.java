@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isPicked = true;
 
+    private boolean gameOver = false;
+
 
     // save the TextViews of all cells in an array, so later on,
     // when a TextView is clicked, we know which cell it is
@@ -184,6 +186,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickTV(View view){
         TextView tv = (TextView) view;
+
+        if (gameOver){
+
+        }
+
         int n = findIndexOfCellTextView(tv);
 //        int i = n/COLUMN_COUNT;
 //        int j = n%COLUMN_COUNT;
@@ -196,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 if (numbers.contains(n)) {
                     String mineText = getResources().getString(R.string.mine);
                     tv.setText(mineText);
+                    gameOver = true;
                 }
             }
         }
