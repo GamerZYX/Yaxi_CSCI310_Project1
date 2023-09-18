@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.os.Handler;
 import android.widget.Button;
+import android.content.Intent;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isPicked = true;
 
-    private boolean gameOver = false;
+    private boolean gameOver = true;
 
 
     // save the TextViews of all cells in an array, so later on,
@@ -163,9 +164,7 @@ public class MainActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                minutes = (clock%3600) / 60;
-                seconds = clock%60;
-                String time = String.format("%02d:%02d", minutes, seconds);
+                String time = String.valueOf(clock);
                 timeView.setText(time);
 
                 if (running) {
@@ -188,7 +187,9 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = (TextView) view;
 
         if (gameOver){
-
+            Intent intent = new Intent(this, ResultActivity.class);
+            gameOver = false;
+            startActivity(intent);
         }
 
         int n = findIndexOfCellTextView(tv);
