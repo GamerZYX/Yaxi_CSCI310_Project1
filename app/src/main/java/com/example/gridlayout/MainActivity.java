@@ -181,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
         return -1;
     }
 
+
     public void onClickTV(View view){
         TextView tv = (TextView) view;
 
@@ -224,9 +225,12 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 else{
-                    if (mineCount > 0) {
-                        tv.setText(String.valueOf(mineCount));
-                    }
+//                    if (mineCount > 0) {
+//                        tv.setText(String.valueOf(mineCount));
+//                    }
+//                    else{
+                        revealAdjacentCells(i, j);
+//                    }
                 }
             }
         }
@@ -246,4 +250,51 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    private void revealAdjacentCells(int row, int col) {
+        if (row < 0 || row >= 12 || col < 0 || col >= 10) {
+            return;
+        }
+
+        int cellIndex = row * COLUMN_COUNT + col;
+        TextView currentCell = cell_tvs.get(cellIndex);
+
+//        if (currentCell.getCurrentTextColor() == Color.GRAY) {
+//            return;
+//        }
+
+        currentCell.setTextColor(Color.GRAY);
+        currentCell.setBackgroundColor(Color.LTGRAY);
+
+        int mineCount = getMineCount(row, col);
+        if (mineCount > 0) {
+            currentCell.setText(String.valueOf(mineCount));
+        } else {
+            revealAdjacentCells(row - 1, col - 1);
+            revealAdjacentCells(row - 1, col);
+            revealAdjacentCells(row - 1, col + 1);
+            revealAdjacentCells(row, col - 1);
+            revealAdjacentCells(row, col + 1);
+            revealAdjacentCells(row + 1, col - 1);
+            revealAdjacentCells(row + 1, col);
+            revealAdjacentCells(row + 1, col + 1);
+        }
+    }
+
+    // 计算指定坐标相邻的地雷数
+    private int getMineCount(int row, int col) {
+        int mineCount = 0;
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = col - 1; j <= col + 1; j++) {
+                if (i >= 0 && i < 12 && j >= 0 && j < 10) {
+                    int neighborIndex = i * COLUMN_COUNT + j;
+                    if (numbers.contains(neighborIndex)) {
+                        mineCount++;
+                    }
+                }
+            }
+        }
+        return mineCount;
+    }
+
 }
