@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> numbers = new ArrayList<>();
     Random random = new Random();
 
+    private ArrayList<Integer> flagNumbers = new ArrayList<>();
+
     private int dpToPixel(int dp) {
         float density = Resources.getSystem().getDisplayMetrics().density;
         return Math.round(dp * density);
@@ -204,33 +206,29 @@ public class MainActivity extends AppCompatActivity {
                 tv.setTextColor(Color.GRAY);
                 tv.setBackgroundColor(Color.LTGRAY);
 
-                int mineCount = 0;
-
-                for (int x = i - 1; x <= i + 1; x++) {
-                    for (int y = j - 1; y <= j + 1; y++) {
-                        if (x >= 0 && x <= 11 && y >= 0 && y <= 9) {
-                            int neighborPosition = x * COLUMN_COUNT + y;
-                            if (numbers.contains(neighborPosition)) {
-                                mineCount++;
-                            }
-                        }
-                    }
-                }
+                int mineCount = getMineCount(i, j);
 
                 if (numbers.contains(n)) {
                     String mineText = getResources().getString(R.string.mine);
                     tv.setText(mineText);
+                    for (Integer cellIndex : numbers) {
+                        TextView cellTextView = cell_tvs.get(cellIndex);
+                        cellTextView.setText(mineText);
+                        cellTextView.setBackgroundColor(Color.RED);
+                    }
+
                     gameOver = true;
                     running = false;
+
                 }
 
                 else{
-//                    if (mineCount > 0) {
-//                        tv.setText(String.valueOf(mineCount));
-//                    }
-//                    else{
+                    if (mineCount > 0) {
+                        tv.setText(String.valueOf(mineCount));
+                    }
+                    else{
                         revealAdjacentCells(i, j);
-//                    }
+                    }
                 }
             }
         }
@@ -240,10 +238,12 @@ public class MainActivity extends AppCompatActivity {
             {
                 tv.setText("");
                 flag_left++;
+                flagNumbers.remove(Integer.valueOf(n));
             }
             else if (flag_left>0 && tv.getCurrentTextColor() == Color.GREEN) {
                 tv.setText(flagText);
                 flag_left--;
+                flagNumbers.add(n);
             }
             TextView flagNumberView = findViewById(R.id.textView01);
             flagNumberView.setText(String.valueOf(flag_left));
@@ -259,17 +259,21 @@ public class MainActivity extends AppCompatActivity {
         int cellIndex = row * COLUMN_COUNT + col;
         TextView currentCell = cell_tvs.get(cellIndex);
 
-//        if (currentCell.getCurrentTextColor() == Color.GRAY) {
-//            return;
-//        }
-
-        currentCell.setTextColor(Color.GRAY);
-        currentCell.setBackgroundColor(Color.LTGRAY);
+        if (currentCell.getCurrentTextColor()==Color.BLUE || !currentCell.getText().equals("")) {
+            return;
+        }
 
         int mineCount = getMineCount(row, col);
-        if (mineCount > 0) {
+        if (numbers.contains(cellIndex)) {
+            return;
+        } else if (mineCount > 0) {
             currentCell.setText(String.valueOf(mineCount));
+            currentCell.setTextColor(Color.GRAY);
+            currentCell.setBackgroundColor(Color.LTGRAY);
         } else {
+            currentCell.setTextColor(Color.BLUE);
+            currentCell.setBackgroundColor(Color.LTGRAY);
+
             revealAdjacentCells(row - 1, col - 1);
             revealAdjacentCells(row - 1, col);
             revealAdjacentCells(row - 1, col + 1);
@@ -279,9 +283,11 @@ public class MainActivity extends AppCompatActivity {
             revealAdjacentCells(row + 1, col);
             revealAdjacentCells(row + 1, col + 1);
         }
+
+
     }
 
-    // 计算指定坐标相邻的地雷数
+
     private int getMineCount(int row, int col) {
         int mineCount = 0;
         for (int i = row - 1; i <= row + 1; i++) {
