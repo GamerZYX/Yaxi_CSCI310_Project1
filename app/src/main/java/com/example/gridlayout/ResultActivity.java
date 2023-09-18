@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.TextView;
+
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -16,6 +18,10 @@ public class ResultActivity extends AppCompatActivity {
 
         Button playAgainButton = findViewById(R.id.playAgainButton);
 
+        TextView textViewUsedTime = findViewById(R.id.textView1);
+        int timeValue = getIntent().getIntExtra("time", 0);
+        textViewUsedTime.setText("Used " + timeValue + " seconds.");
+
         playAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -23,5 +29,8 @@ public class ResultActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+//        String timeValue = MainActivity.time;
+//        textViewUsedTime.setText("Used " + timeValue + " seconds.");
     }
 }

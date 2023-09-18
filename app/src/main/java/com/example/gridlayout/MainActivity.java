@@ -26,12 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private int clock = 0;
     private boolean running = true;
 
-    private int minutes = 0;
-    private int seconds = 0;
-
     private boolean isPicked = true;
 
-    private boolean gameOver = true;
+    private boolean gameOver = false;
+
 
 
     // save the TextViews of all cells in an array, so later on,
@@ -189,22 +187,46 @@ public class MainActivity extends AppCompatActivity {
         if (gameOver){
             Intent intent = new Intent(this, ResultActivity.class);
             gameOver = false;
+            intent.putExtra("time", clock);
             startActivity(intent);
         }
 
         int n = findIndexOfCellTextView(tv);
-//        int i = n/COLUMN_COUNT;
-//        int j = n%COLUMN_COUNT;
+
         if (isPicked)
         {
-            tv.setText(String.valueOf(numbers.get(n%4)));
+            int i = n / COLUMN_COUNT;
+            int j = n % COLUMN_COUNT;
+
+            tv.setText("");
             if (tv.getCurrentTextColor() == Color.GREEN) {
                 tv.setTextColor(Color.GRAY);
                 tv.setBackgroundColor(Color.LTGRAY);
+
+                int mineCount = 0;
+
+                for (int x = i - 1; x <= i + 1; x++) {
+                    for (int y = j - 1; y <= j + 1; y++) {
+                        if (x >= 0 && x <= 11 && y >= 0 && y <= 9) {
+                            int neighborPosition = x * COLUMN_COUNT + y;
+                            if (numbers.contains(neighborPosition)) {
+                                mineCount++;
+                            }
+                        }
+                    }
+                }
+
                 if (numbers.contains(n)) {
                     String mineText = getResources().getString(R.string.mine);
                     tv.setText(mineText);
                     gameOver = true;
+                    running = false;
+                }
+
+                else{
+                    if (mineCount > 0) {
+                        tv.setText(String.valueOf(mineCount));
+                    }
                 }
             }
         }
