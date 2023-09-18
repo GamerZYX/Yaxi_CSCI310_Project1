@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean gameOver = false;
 
+    private boolean gameWin = true;
+
 
 
     // save the TextViews of all cells in an array, so later on,
@@ -191,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ResultActivity.class);
             gameOver = false;
             intent.putExtra("time", clock);
+            intent.putExtra("gameWin", gameWin);
             startActivity(intent);
         }
 
@@ -216,18 +219,44 @@ public class MainActivity extends AppCompatActivity {
                         cellTextView.setText(mineText);
                         cellTextView.setBackgroundColor(Color.RED);
                     }
-
+                    gameWin = false;
                     gameOver = true;
                     running = false;
-
                 }
 
                 else{
                     if (mineCount > 0) {
                         tv.setText(String.valueOf(mineCount));
+                        tv.setTextColor(Color.GRAY);
                     }
                     else{
                         revealAdjacentCells(i, j);
+                    }
+
+                    boolean allCellsProcessed = true;
+
+                    for (TextView cell : cell_tvs) {
+                        int textColor = cell.getCurrentTextColor();
+
+                        int cellIndex = cell_tvs.indexOf(cell);
+                        if (!numbers.contains(cellIndex)) {
+                            if (textColor != Color.BLUE && textColor != Color.GRAY) {
+                                allCellsProcessed = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (allCellsProcessed) {
+                        String flagText = getResources().getString(R.string.flag);
+                        for (Integer cellIndex : numbers) {
+                            TextView cellTextView = cell_tvs.get(cellIndex);
+                            cellTextView.setText(flagText);
+                            cellTextView.setBackgroundColor(Color.YELLOW);
+                        }
+                        gameWin = true;
+                        gameOver = true;
+                        running = false;
                     }
                 }
             }

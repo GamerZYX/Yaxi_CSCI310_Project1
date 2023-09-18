@@ -21,6 +21,14 @@ public class ResultActivity extends AppCompatActivity {
         TextView textViewUsedTime = findViewById(R.id.textView1);
         int timeValue = getIntent().getIntExtra("time", 0);
         textViewUsedTime.setText("Used " + timeValue + " seconds.");
+        boolean gameWin = getIntent().getBooleanExtra("gameWin", false);
+        if (!gameWin){
+            TextView textView2 = findViewById(R.id.textView2);
+            TextView textView3 = findViewById(R.id.textView3);
+
+            textView2.setText("You Lost.");
+            textView3.setText("Keep trying!");
+        }
 
         playAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
